@@ -1,38 +1,121 @@
-.App {
-  text-align: center;
+.rdrDateRangePickerWrapper {
+  width: max-content;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas: "calendars days";
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.comparer-container {
+  max-width: 664px;
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.comparer-container .inputs-container {
+  padding: 20px;
+  flex: 1;
+  display: none;
   flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.comparer-container .inputs-container.active {
+  display: flex;
+}
+
+.comparer-container .switch-container {
+  margin-top: 10px;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 2px;
 }
 
-.App-link {
-  color: #61dafb;
+.comparer-container .row-container {
+  gap: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.comparer-container .row-container,
+.comparer-container .row-container .inputs {
+  display: flex;
+  align-items: center;
+}
+
+.comparer-container .row-container .inputs {
+  flex: 1;
+  gap: 5px;
+}
+
+.comparer-container .row-container .inputs input {
+  flex: 1;
+}
+
+.comparer-container .row-container .MuiInputBase-root {
+  flex: 1;
+  min-width: 140px;
+  max-width: 140px;
+}
+
+.comparer-container .row-container .thisMonthContainer,
+.comparer-container .row-container .previousPeriod {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 160px;
+  max-width: 160px;
+}
+
+.comparer-container .row-container .thisMonthContainer .square,
+.comparer-container .row-container .previousPeriod .square {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: rgb(61, 145, 255);
+}
+
+.comparer-container .row-container .previousPeriod .square {
+  background: gray;
+}
+
+.comparer-container .thisMonthContainer .label,
+.comparer-container .previousPeriod .label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rdrDateRangePickerWrapper .rdrDefinedRangesWrapper {
+  grid-area: days;
+}
+
+.rdrDateRangePickerWrapper .rdrCalendarWrapper.rdrDateRangeWrapper {
+  display: grid;
+  /* grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "compareContainer"
+    "monthAndYear"
+    "monthHoriz"; */
+  grid-area: calendars;
+}
+
+.rdrDateRangePickerWrapper
+  .rdrCalendarWrapper.rdrDateRangeWrapper
+  .rdrDateDisplayWrapper {
+  display: none;
+}
+
+/* .rdrDateRangePickerWrapper
+  .rdrCalendarWrapper.rdrDateRangeWrapper
+  .rdrMonthAndYearWrapper {
+  grid-area: monthAndYear;
+}
+
+.rdrDateRangePickerWrapper
+  .rdrCalendarWrapper.rdrDateRangeWrapper
+  .rdrMonths.rdrMonthsHorizontal {
+  grid-area: monthHoriz;
+} */
+
+.rdrDateRangePickerWrapper .rdrInputRanges {
+  display: none;
 }
