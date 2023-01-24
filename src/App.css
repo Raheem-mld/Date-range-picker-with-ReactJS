@@ -1,3 +1,11 @@
+.dateRangePicker {
+  display: flex;
+}
+
+.dateRangePicker .datePreset{
+  width: 200px;
+}
+
 .rdrDateRangePickerWrapper {
   width: max-content;
   display: grid;
@@ -57,6 +65,14 @@
   max-width: 140px;
 }
 
+.comparer-container .row-container .MuiFormControl-root input {
+  padding: 10px;
+}
+
+.comparer-container .row-container .MuiFormControl-root button {
+  display: none;
+}
+
 .comparer-container .row-container .thisMonthContainer,
 .comparer-container .row-container .previousPeriod {
   display: flex;
@@ -86,6 +102,7 @@
 
 .rdrDateRangePickerWrapper .rdrDefinedRangesWrapper {
   grid-area: days;
+  display: none;
 }
 
 .rdrDateRangePickerWrapper .rdrCalendarWrapper.rdrDateRangeWrapper {
