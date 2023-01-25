@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { addDays, addWeeks } from 'date-fns';
+import { addDays, addMonths, addWeeks } from 'date-fns';
 import { useState } from 'react';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
@@ -7,30 +7,22 @@ import 'react-date-range/dist/theme/default.css';
 import Switch from '@mui/material/Switch';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Moment from 'moment';
-import DateTimePicker from 'react-datetime-picker';
 import date from 'date-and-time';
 import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import './App.css';
-import { lastDayOfWeek } from 'date-fns/esm';
 
 export default function App() {
 
   const [showCompare, setShowCompare] = useState(false)
 
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -38,13 +30,13 @@ export default function App() {
 
   const [state, setState] = useState({
     selection1: {
-      startDate: addDays(new Date(), -6),
+      startDate: new Date(),
       endDate: new Date(),
       key: 'selection1'
     },
     selection2: {
-      startDate: addDays(new Date(), -13),
-      endDate: addDays(new Date(), -7),
+      startDate: addDays(new Date(), -1),
+      endDate: addDays(new Date(), -1),
       key: 'selection2'
     }
   });
@@ -70,7 +62,7 @@ export default function App() {
     }
   }
 
-  const handleTodayClick = (index) => {
+  const handlePresetDateClick = (index) => {
     switch (index) {
       case 0:
         setState({
@@ -145,6 +137,44 @@ export default function App() {
         })
         break;
 
+      case 6:
+        var curr = new Date; // get current date
+        var first = curr.getDate() - curr.getDay();
+        var firstdayOb = new Date(curr.setDate(first));
+        setState({
+          ...state,
+          selection1: {
+            ...state.selection1,
+            startDate: firstdayOb,
+            endDate: new Date()
+          }
+        })
+        break;
+
+      case 7:
+        var curr = new Date;
+        setState({
+          ...state,
+          selection1: {
+            ...state.selection1,
+            startDate: addMonths(addDays(new Date(), -curr.getDate() + 1), -1),
+            endDate: addDays(new Date(), -curr.getDate())
+          }
+        })
+        break;
+
+      case 8:
+        var curr = new Date;
+        setState({
+          ...state,
+          selection1: {
+            ...state.selection1,
+            startDate: addDays(new Date(), -curr.getDate() + 1),
+            endDate: new Date()
+          }
+        })
+        break;
+
       default:
         break;
     }
@@ -164,8 +194,6 @@ export default function App() {
     }
   }
 
-  const [value, setValue] = React.useState(dayjs('2022-04-07'));
-
   return (
 
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -180,7 +208,6 @@ export default function App() {
                   <div className="label">This week</div>
                 </div>
                 <div className="inputs">
-                  {/* <DateTimePicker openWidgetsOnFocus={false} format={"y-MM-dd"} value={state.selection1.startDate} onChange={(value) => { handleStartDateChange(value) }} /> */}
                   <DesktopDatePicker
                     value={state.selection1.startDate}
                     onChange={(newValue) => { handleStartDateChange(newValue) }}
@@ -196,8 +223,6 @@ export default function App() {
                     inputFormat="MM/DD/YYYY"
                     size='small'
                   />
-
-                  {/* <DateTimePicker openWidgetsOnFocus={false} format={"y-MM-dd"} value={state.selection1.endDate} onChange={(value) => { handleEndDateChange(value) }} /> */}
                 </div>
               </div>
               <div className="row-container">
@@ -217,9 +242,19 @@ export default function App() {
                   </Select>
                 </div>
                 <div className="inputs">
-                  <TextField id="outlined-basic" variant="outlined" size='small' value={Moment(state.selection2.startDate).format('DD/MM/YYYY')} />
+                  <DesktopDatePicker
+                    value={state.selection2.startDate}
+                    renderInput={(params) => <TextField {...params} />}
+                    inputFormat="MM/DD/YYYY"
+                    size='small'
+                  />
                   -
-                  <TextField id="outlined-basic" variant="outlined" size='small' value={Moment(state.selection2.endDate).format('DD/MM/YYYY')} />
+                  <DesktopDatePicker
+                    value={state.selection2.endDate}
+                    renderInput={(params) => <TextField {...params} />}
+                    inputFormat="MM/DD/YYYY"
+                    size='small'
+                  />
                 </div>
               </div>
             </div>
@@ -253,39 +288,57 @@ export default function App() {
           <List component="nav" aria-label="main mailbox folders">
             <ListItemButton
               selected={selectedIndex === 0}
-              onClick={(event) => { handleListItemClick(event, 0); handleTodayClick(0) }}
+              onClick={(event) => { handleListItemClick(event, 0); handlePresetDateClick(0) }}
             >
               <ListItemText primary="Today" />
             </ListItemButton>
             <ListItemButton
               selected={selectedIndex === 1}
-              onClick={(event) => { handleListItemClick(event, 1); handleTodayClick(1) }}
+              onClick={(event) => { handleListItemClick(event, 1); handlePresetDateClick(1) }}
             >
               <ListItemText primary="Yesterday" />
             </ListItemButton>
             <ListItemButton
               selected={selectedIndex === 2}
-              onClick={(event) => { handleListItemClick(event, 2); handleTodayClick(2) }}
+              onClick={(event) => { handleListItemClick(event, 2); handlePresetDateClick(2) }}
             >
               <ListItemText primary="Last 7 days" />
             </ListItemButton>
             <ListItemButton
               selected={selectedIndex === 3}
-              onClick={(event) => { handleListItemClick(event, 3); handleTodayClick(3) }}
+              onClick={(event) => { handleListItemClick(event, 3); handlePresetDateClick(3) }}
             >
               <ListItemText primary="Last 14 days" />
             </ListItemButton>
             <ListItemButton
               selected={selectedIndex === 4}
-              onClick={(event) => { handleListItemClick(event, 4); handleTodayClick(4) }}
+              onClick={(event) => { handleListItemClick(event, 4); handlePresetDateClick(4) }}
             >
               <ListItemText primary="Last 30 days" />
             </ListItemButton>
             <ListItemButton
               selected={selectedIndex === 5}
-              onClick={(event) => { handleListItemClick(event, 5); handleTodayClick(5) }}
+              onClick={(event) => { handleListItemClick(event, 5); handlePresetDateClick(5) }}
             >
               <ListItemText primary="Last week" />
+            </ListItemButton>
+            <ListItemButton
+              selected={selectedIndex === 6}
+              onClick={(event) => { handleListItemClick(event, 6); handlePresetDateClick(6) }}
+            >
+              <ListItemText primary="This week" />
+            </ListItemButton>
+            <ListItemButton
+              selected={selectedIndex === 7}
+              onClick={(event) => { handleListItemClick(event, 7); handlePresetDateClick(7) }}
+            >
+              <ListItemText primary="Last month" />
+            </ListItemButton>
+            <ListItemButton
+              selected={selectedIndex === 8}
+              onClick={(event) => { handleListItemClick(event, 8); handlePresetDateClick(8) }}
+            >
+              <ListItemText primary="This month" />
             </ListItemButton>
           </List>
         </div>
